@@ -19,18 +19,20 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: 17
-    - uses: actions/cache@v3
-      id: avd-cache
-      with:
-        path: |
-          ~/.android/avd/*
-          ~/.android/adb*
-          ~/.android/debug.keystore
-        key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}
+        cache: gradle
+    # - uses: actions/cache@v3
+    #   id: avd-cache
+    #   with:
+    #     path: |
+    #       ~/.android/avd/*
+    #       ~/.android/adb*
+    #       ~/.android/debug.keystore
+    #     key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}
     - name: Start Android Emulator
-      if: steps.avd-cache.outputs.cache-hit != 'true'
+      # if: steps.avd-cache.outputs.cache-hit != 'true'
       uses: ReactiveCircus/android-emulator-runner@v2.28.0
       with:
+        emulator-boot-timeout: 600
         # API level of the platform and system image - e.g. 23 for Android Marshmallow, 29 for Android 10
         api-level: ${{ env.api-level }}
         # target of the system image - default, google_apis, google_apis_playstore, aosp_atd, google_atd, android-wear, android-wear-cn, android-tv or google-tv
@@ -39,8 +41,8 @@ jobs:
         avd-name: test_${{ matrix.os }}
         sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
+        emulator-options: -no-window -gpu host -accel on -no-snapshot -noaudio -no-boot-anim
         disable-spellchecker: true
-        # disable-linux-hw-accel: false
+        disable-linux-hw-accel: false
         working-directory: ./android
         script: echo "Emulator is running!"
