@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
     - uses: actions/checkout@v3
     - uses: actions/cache@v3
@@ -22,7 +22,7 @@ jobs:
           ~/.android/avd/*
           ~/.android/adb*
           ~/.android/debug.keystore
-        key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}_${{ env.api-arch }}
+        key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}-${{ env.api-arch }}
     - name: Cold Boot Android Emulator
       if: steps.avd-cache.outputs.cache-hit != 'true'
       uses: ReactiveCircus/android-emulator-runner@v2.28.0
@@ -39,34 +39,38 @@ jobs:
         ram-size: 2048M
         sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim -camera-back none
+        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
         disable-animations: false # Disabling takes little bit of time to exec
         channel: canary
         working-directory: ./android
         script: echo "Generated AVD Snapshot."
-    - name: Quick Boot and Run Android Tests
-      uses: ReactiveCircus/android-emulator-runner@v2.28.0
-      with:
-        emulator-boot-timeout: 300
-        api-level: ${{ env.api-level }}
-        target: ${{ env.api-target }}
-        arch: ${{ env.api-arch }}
-        avd-name: test_${{ matrix.os }}
-        profile: Galaxy Nexus
-        cores: 2
-        ram-size: 2048M
-        sdcard-path-or-size: 100M
-        force-avd-creation: false
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim -camera-back none
-        disable-animations: true
-        working-directory: ./android
-        channel: canary
-        pre-emulator-launch-script: npx detox build --configuration android.emu.debug
-        script: npx detox test --configuration android.emu.debug --headless --record-videos failing
-    - name: Store Artifacts on Fail
-      uses: actions/upload-artifact@v3
-      if: failure()
-      with:
-        name: detox-artifacts
-        path: artifacts
+    # - name: Quick Boot and Run Android Tests
+    #   uses: ReactiveCircus/android-emulator-runner@v2.28.0
+    #   with:
+    #     emulator-boot-timeout: 300
+    #     api-level: ${{ env.api-level }}
+    #     target: ${{ env.api-target }}
+    #     arch: ${{ env.api-arch }}
+    #     avd-name: test_${{ matrix.os }}
+    #     profile: Galaxy Nexus
+    #     cores: 2
+    #     ram-size: 2048M
+    #     sdcard-path-or-size: 100M
+    #     force-avd-creation: false
+    #     emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim -camera-back none
+    #     disable-animations: true
+    #     working-directory: ./android
+    #     channel: canary
+    #     pre-emulator-launch-script: npx detox build --configuration android.emu.debug
+    #     script: npx detox test --configuration android.emu.debug --headless --record-videos failing
+    # - name: Build with Detox
+    #   run: npm i && npx detox --configuration android.emu.release
+    - name: Run Detox Tests
+      run: npx detox --configuration android.emu.release --headless --record-videos failing
+    # - name: Store Artifacts on Fail
+    #   uses: actions/upload-artifact@v3
+    #   if: failure()
+    #   with:
+    #     name: detox-artifacts
+    #     path: artifacts
 
