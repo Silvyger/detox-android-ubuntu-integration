@@ -43,7 +43,6 @@ jobs:
         emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
         disable-animations: false # Disabling takes little bit of time to exec
         channel: canary
-        working-directory: ./android
         script: echo "Generated AVD Snapshot."
     - name: Install dependencies
       run: npm i
@@ -66,7 +65,6 @@ jobs:
         force-avd-creation: false
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim -camera-back none
         disable-animations: true
-        working-directory: ./android
         channel: canary
         script: |
           npx detox build --configuration android.att.debug
