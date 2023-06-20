@@ -41,9 +41,10 @@ jobs:
         avd-name: test_${{ matrix.os }}
         sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-window -gpu host -accel on -no-snapshot -noaudio -no-boot-anim
+        profile: Galaxy Nexus
+        cores: 2
+        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
         disable-spellchecker: true
-        disable-linux-hw-accel: false
         channel: canary
         working-directory: ./android
         script: echo "Emulator is running!"
