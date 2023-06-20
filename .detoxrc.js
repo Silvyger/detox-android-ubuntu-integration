@@ -60,7 +60,8 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'test_.*'
+        avdName: 'test_device',
+
       }
     }
   },
