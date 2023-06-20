@@ -61,16 +61,15 @@ jobs:
     #     disable-animations: true
     #     working-directory: ./android
     #     channel: canary
-    #     pre-emulator-launch-script: npx detox build --configuration android.emu.debug
     #     script: npx detox test --configuration android.emu.debug --headless --record-videos failing
     # - name: Build with Detox
-    #   run: npm i && npx detox --configuration android.emu.release
+    #   run: npm i && npx detox build --configuration android.emu.release
     - name: Run Detox Tests
-      run: npx detox --configuration android.emu.release --headless --record-videos failing
-    # - name: Store Artifacts on Fail
-    #   uses: actions/upload-artifact@v3
-    #   if: failure()
-    #   with:
-    #     name: detox-artifacts
-    #     path: artifacts
+      run: npx detox test --configuration android.emu.release --headless --record-videos failing
+    - name: Store Artifacts on Fail
+      uses: actions/upload-artifact@v3
+      if: failure()
+      with:
+        name: detox-artifacts
+        path: artifacts
 
