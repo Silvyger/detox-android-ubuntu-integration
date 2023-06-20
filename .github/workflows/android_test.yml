@@ -8,13 +8,13 @@ jobs:
     env:
       api-level: 29
       api-target: google_apis
-      api-arch: x86
+      api-arch: x86_64
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+    timeout-minutes: 15
     steps:
-    - name: checkout
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
     - uses: actions/setup-java@v3
       with:
         distribution: 'zulu'
@@ -27,7 +27,7 @@ jobs:
           ~/.android/adb*
           ~/.android/debug.keystore
         key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}
-    - name: run emulator to generate snapshot for caching
+    - name: Start Android Emulator
       if: steps.avd-cache.outputs.cache-hit != 'true'
       uses: ReactiveCircus/android-emulator-runner@v2.28.0
       with:
@@ -36,9 +36,11 @@ jobs:
         # target of the system image - default, google_apis, google_apis_playstore, aosp_atd, google_atd, android-wear, android-wear-cn, android-tv or google-tv
         target: ${{ env.api-target }}
         arch: ${{ env.api-arch }}
+        avd-name: test_${{ matrix.os }}
+        sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
         disable-spellchecker: true
-        disable-linux-hw-accel: auto
+        # disable-linux-hw-accel: false
         working-directory: ./android
         script: echo "Emulator is running!"
