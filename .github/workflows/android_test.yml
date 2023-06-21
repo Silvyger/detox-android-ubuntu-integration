@@ -51,6 +51,8 @@ jobs:
         script: echo "Generated AVD Snapshot."
     - name: Install dependencies
       run: npm i
+    - name: Build Android Release
+      run: npx detox --configuration android.att.release
     - name: Quick Boot and Run Android Tests
       uses: ReactiveCircus/android-emulator-runner@v2.28.0
       with:
@@ -67,9 +69,7 @@ jobs:
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
         channel: canary
-        script: |
-          npx detox build --configuration android.att.release
-          npx detox test --configuration android.att.release --record-videos failing
+        script: npx detox test --configuration android.att.release --record-videos failing
     - name: Store Artifacts on Fail
       uses: actions/upload-artifact@v3
       if: failure()
