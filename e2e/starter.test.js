@@ -1,6 +1,6 @@
 describe('Home screen', () => {
   beforeAll(async () => {
-    await device.launchApp();
+    await device.launchApp({ delete: true });
   });
 
   beforeEach(async () => {
