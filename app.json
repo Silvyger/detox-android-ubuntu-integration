@@ -33,6 +33,7 @@
         "projectId": "3fdb01b9-55d9-4e8d-9991-4a6bd65a1cf3"
       }
     },
+    "plugins": ["@config-plugins/detox"],
     "owner": "silvyger"
   }
 }

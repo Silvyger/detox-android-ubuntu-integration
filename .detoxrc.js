@@ -4,8 +4,8 @@ module.exports = {
     level: process.env.CI ? 'debug' : undefined
   },
   testRunner: {
-    '$0': 'jest',
     args: {
+      '$0': 'jest',
       config: 'e2e/jest.config.js',
       _: ['e2e']
     },
@@ -60,8 +60,7 @@ module.exports = {
     emulator: {
       type: 'android.emulator',
       device: {
-        avdName: 'test_device',
-
+        avdName: 'test_device'
       }
     }
   },
