@@ -52,7 +52,7 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Build Android Release
-      run: npx detox --configuration android.att.release
+      run: npx detox build --configuration android.att.release
     - name: Quick Boot and Run Android Tests
       uses: ReactiveCircus/android-emulator-runner@v2.28.0
       with:
