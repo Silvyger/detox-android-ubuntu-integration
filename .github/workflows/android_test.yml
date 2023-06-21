@@ -69,7 +69,7 @@ jobs:
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim -camera-back none
         disable-animations: true
         channel: canary
-        script: npx detox test --configuration android.att.release --record-videos failing
+        script: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
     - name: Store Artifacts on Fail
       uses: actions/upload-artifact@v3
       if: failure()
