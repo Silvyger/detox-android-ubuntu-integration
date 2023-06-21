@@ -44,7 +44,7 @@ jobs:
         ram-size: 2048M
         sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim
+        emulator-options: -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim
         disable-animations: false # Disabling takes little bit of time to exec
         channel: canary
         script: echo "Generated AVD Snapshot."
@@ -67,12 +67,12 @@ jobs:
         ram-size: 2048M
         sdcard-path-or-size: 100M
         force-avd-creation: false
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -no-snapshot -noaudio -no-boot-anim -camera-back none
+        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
         channel: canary
         script: |
           npx detox build --configuration android.att.debug
-          npx detox test --configuration android.att.debug --headless --record-videos failing
+          npx detox test --configuration android.att.debug --record-videos failing
     - name: Store Artifacts on Fail
       uses: actions/upload-artifact@v3
       if: failure()
