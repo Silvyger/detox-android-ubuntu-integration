@@ -34,7 +34,7 @@ jobs:
     - name: Create AVD
       if: steps.avd-cache.outputs.cache-hit != 'true'
       env:
-        api-package: system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}'
+        api-package: system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}
       run: |
         sdkmanager --install '${{ env.api-package }}' > /dev/null
         echo no | avdmanager create avd --force -n test_device --abi 'default/x86' --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '100M'
