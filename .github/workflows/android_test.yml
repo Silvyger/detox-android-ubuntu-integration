@@ -23,18 +23,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
-    - name: Get AVD Cache
-      uses: actions/cache@v3
-      id: avd-cache
-      with:
-        path: |
-          ~/.android/avd/*
-          ~/.android/adb*
-        key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}-${{ env.api-arch }}
     - name: Create AVD
-      if: steps.avd-cache.outputs.cache-hit != 'true'
       env:
-        api-package: system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}
+        api-package: "system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}"
       run: |
         sdkmanager --install '${{ env.api-package }}' > /dev/null
         echo no | avdmanager create avd --force -n test_device --abi 'default/x86' --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '100M'
@@ -50,7 +41,7 @@ jobs:
         adb wait-for-device shell 'echo "Device started."; while [[ -z $(getprop sys.boot_completed) ]]; do echo "Waiting for boot."; sleep 5; done;'
     - name: Run Detox Tests
       timeout-minutes: 5
-      run: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
+      run: npx detox test --configuration android.att.release --record-videos failing
     - name: Stop Emulator
       if: always()
       run: |
