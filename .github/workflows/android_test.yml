@@ -40,11 +40,17 @@ jobs:
         echo no | avdmanager create avd --force -n test_device --abi 'default/x86' --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '100M'
     - name: Install dependencies
       run: npm i
-    - name: Build Android Release
-      run: npx detox build --configuration android.emu.release --device-name test_device
-    - name: Detox Emulator Tests
+    - name: Start Android Emulator
       run: |
-        npx detox test --configuration android.emu.release --headless --record-videos failing --loglevel verbose
+        emulator -avd test_device -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim -camera-back none &
+        adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+    - name: Build Android Release
+      run: npx detox build --configuration android.att.release
+    - name: Run Detox Tests
+      run: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
+    - name: Stop Emulator
+      if: always()
+      run: adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
     - name: Store Artifacts on Fail
       uses: actions/upload-artifact@v3
       if: failure()
