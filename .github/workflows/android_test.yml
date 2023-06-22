@@ -53,23 +53,26 @@ jobs:
       run: npm i
     - name: Build Android Release
       run: npx detox build --configuration android.att.release
-    - name: Quick Boot and Run Android Tests
-      uses: ReactiveCircus/android-emulator-runner@v2.28.0
-      with:
-        emulator-boot-timeout: 300
-        api-level: ${{ env.api-level }}
-        target: ${{ env.api-target }}
-        arch: ${{ env.api-arch }}
-        avd-name: test_device
-        profile: Galaxy Nexus
-        cores: 2
-        ram-size: 2048M
-        sdcard-path-or-size: 100M
-        force-avd-creation: false
-        emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim -camera-back none
-        disable-animations: true
-        channel: canary
-        script: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
+    # - name: Quick Boot and Run Android Tests
+    #   uses: ReactiveCircus/android-emulator-runner@v2.28.0
+    #   with:
+    #     emulator-boot-timeout: 300
+    #     api-level: ${{ env.api-level }}
+    #     target: ${{ env.api-target }}
+    #     arch: ${{ env.api-arch }}
+    #     avd-name: test_device
+    #     profile: Galaxy Nexus
+    #     cores: 2
+    #     ram-size: 2048M
+    #     sdcard-path-or-size: 100M
+    #     force-avd-creation: false
+    #     emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim -camera-back none
+    #     disable-animations: true
+    #     channel: canary
+    #     script: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
+    - name: Detox Emulator Tests
+      run: |
+        npx detox test --configuration android.emu.release --record-videos failing --loglevel verbose
     - name: Store Artifacts on Fail
       uses: actions/upload-artifact@v3
       if: failure()
