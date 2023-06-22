@@ -23,55 +23,25 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: Setup Android SDK
       uses: android-actions/setup-android@v2
-    # - name: Get AVD Cache
-    #   uses: actions/cache@v3
-    #   id: avd-cache
-    #   with:
-    #     path: |
-    #       ~/.android/avd/*
-    #       ~/.android/adb*
-    #     key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}-${{ env.api-arch }}
-    # - name: Cold Boot Android Emulator
-    #   if: steps.avd-cache.outputs.cache-hit != 'true'
-    #   uses: ReactiveCircus/android-emulator-runner@v2.28.0
-    #   with:
-    #     emulator-boot-timeout: 600
-    #     # API level of the platform and system image - e.g. 23 for Android Marshmallow, 29 for Android 10
-    #     api-level: ${{ env.api-level }}
-    #     # target of the system image - default, google_apis, google_apis_playstore, aosp_atd, google_atd, android-wear, android-wear-cn, android-tv or google-tv
-    #     target: ${{ env.api-target }}
-    #     arch: ${{ env.api-arch }}
-    #     avd-name: test_device
-    #     profile: Galaxy Nexus
-    #     cores: 2
-    #     ram-size: 2048M
-    #     sdcard-path-or-size: 100M
-    #     force-avd-creation: false
-    #     emulator-options: -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim
-    #     disable-animations: false # Disabling takes little bit of time to exec
-    #     channel: canary
-    #     script: echo "Generated AVD Snapshot."
+    - name: Get AVD Cache
+      uses: actions/cache@v3
+      id: avd-cache
+      with:
+        path: |
+          ~/.android/avd/*
+          ~/.android/adb*
+        key: avd-${{ env.api-level }}-${{ matrix.os }}-${{ env.api-target }}-${{ env.api-arch }}
+    - name: Create AVD
+      if: steps.avd-cache.outputs.cache-hit != 'true'
+      env:
+        api-package: system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}'
+      run: |
+        sdkmanager --install '${{ env.api-package }}' > /dev/null
+        echo no | avdmanager create avd --force -n test_device --abi 'default/x86' --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '100M'
     - name: Install dependencies
       run: npm i
     - name: Build Android Release
-      run: npx detox build --configuration android.emu.release
-    # - name: Quick Boot and Run Android Tests
-    #   uses: ReactiveCircus/android-emulator-runner@v2.28.0
-    #   with:
-    #     emulator-boot-timeout: 300
-    #     api-level: ${{ env.api-level }}
-    #     target: ${{ env.api-target }}
-    #     arch: ${{ env.api-arch }}
-    #     avd-name: test_device
-    #     profile: Galaxy Nexus
-    #     cores: 2
-    #     ram-size: 2048M
-    #     sdcard-path-or-size: 100M
-    #     force-avd-creation: false
-    #     emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -accel on -noaudio -no-boot-anim -camera-back none
-    #     disable-animations: true
-    #     channel: canary
-    #     script: npx detox test --configuration android.att.release --record-videos failing --loglevel verbose
+      run: npx detox build --configuration android.emu.release --device-name test_device
     - name: Detox Emulator Tests
       run: |
         npx detox test --configuration android.emu.release --headless --record-videos failing --loglevel verbose
