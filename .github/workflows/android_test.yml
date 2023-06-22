@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       api-level: 31
-      api-target: default
+      api-target: google_apis
       api-arch: x86
     strategy:
       matrix:
