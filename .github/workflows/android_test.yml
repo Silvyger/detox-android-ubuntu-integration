@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     env:
-      api-level: 28 #https://github.com/wix/Detox/issues/3342#issuecomment-1117847523
+      api-level: 31
       api-target: default
       api-arch: x86
     strategy:

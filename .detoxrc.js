@@ -10,7 +10,7 @@ module.exports = {
       _: ['e2e']
     },
     jest: {
-      setupTimeout: 120000
+      setupTimeout: 300000
     }
   },
   artifacts: {
