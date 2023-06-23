@@ -28,7 +28,7 @@ jobs:
         api-package: "system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}"
       run: |
         sdkmanager --install '${{ env.api-package }}' > /dev/null
-        echo no | avdmanager create avd --force -n test_device --abi 'default/x86' --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '256M'
+        echo no | avdmanager create avd --force -n test_device --package '${{ env.api-package }}' --device 'Galaxy Nexus' --sdcard '256M'
     - name: Install dependencies
       run: npm i
     - name: Build Android Release
