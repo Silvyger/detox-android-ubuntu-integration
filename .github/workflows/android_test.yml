@@ -29,19 +29,19 @@ jobs:
       run: |
         sdkmanager --install '${{ env.api-package }}' 'emulator' > /dev/null
         echo no | avdmanager create avd -n test_device --package '${{ env.api-package }}'
-    # - name: Install dependencies
-    #   run: npm i
-    # - name: Build Android Release
-    #   timeout-minutes: 90
-    #   run: npx detox build --configuration android.att.release
+    - name: Install dependencies
+      run: npm i
+    - name: Build Android Release
+      timeout-minutes: 90
+      run: npx detox build --configuration android.att.release
     - name: Start Android Emulator
-      timeout-minutes: 20
+      timeout-minutes: 25
       run: |
         $ANDROID_SDK_ROOT/emulator/emulator -avd test_device -no-window -gpu swiftshader_indirect -no-accel -noaudio -no-boot-anim -camera-back none &
-        adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 5; done;'
-    # - name: Run Detox Tests
-    #   timeout-minutes: 5
-    #   run: npx detox test --configuration android.att.release --record-videos failing
+        adb wait-for-device shell 'echo "Device started: Waiting for boot, may take 20 minutes..."; while [[ -z $(getprop sys.boot_completed) ]]; do sleep 5; done;'
+    - name: Run Detox Tests
+      timeout-minutes: 5
+      run: npx detox test --configuration android.att.release --record-videos failing
     - name: Stop Emulator
       if: always()
       run: adb devices | grep emulator | cut -f1 | while read line; do adb -s $line emu kill; done
