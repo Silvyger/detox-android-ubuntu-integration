@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     env:
-      api-level: 31
+      api-level: 29
       api-target: default
       api-arch: x86_64
     strategy:
@@ -30,6 +30,7 @@ jobs:
         profile: Galaxy Nexus
         cores: 2
         ram-size: 2048M
+        sdcard-path-or-size: 100M
         force-avd-creation: false
         emulator-options: -no-snapshot-load -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
         disable-animations: false # Disabling takes little bit of time to exec
@@ -57,6 +58,10 @@ jobs:
         target: ${{ env.api-target }}
         arch: ${{ env.api-arch }}
         avd-name: test_device
+        profile: Galaxy Nexus
+        cores: 2
+        ram-size: 2048M
+        sdcard-path-or-size: 100M
         force-avd-creation: false
         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
         disable-animations: true
