@@ -8,7 +8,7 @@ jobs:
     env:
       api-level: 30
       api-target: google_atd
-      api-arch: x86
+      api-arch: x86_64
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
@@ -27,8 +27,6 @@ jobs:
       env:
         api-package: "system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}"
       run: |
-        sudo apt-get update --yes
-        sudo apt-get install libpulse0:i386
         sdkmanager --install '${{ env.api-package }}' > /dev/null
         echo no | avdmanager create avd -n test_device --package '${{ env.api-package }}'
     # - name: Install dependencies
