@@ -27,6 +27,7 @@ jobs:
       env:
         api-package: "system-images;android-${{ env.api-level }};${{ env.api-target }};${{ env.api-arch }}"
       run: |
+        sudo apt-get update --yes
         sudo apt-get install lib32-libpulse
         sdkmanager --install '${{ env.api-package }}' > /dev/null
         echo no | avdmanager create avd -n test_device --package '${{ env.api-package }}'
