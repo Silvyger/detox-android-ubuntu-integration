@@ -16,7 +16,7 @@ jobs:
     - uses: actions/checkout@v3
     - run: |
         echo "${{github.workspace}}"
-        detox test --configuration android.att.release --showConfig
+        npx detox test --configuration android.att.release --showConfig
     - uses: actions/setup-java@v3
       with:
         java-version: 17
