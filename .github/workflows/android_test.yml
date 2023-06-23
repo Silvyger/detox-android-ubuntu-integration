@@ -6,9 +6,9 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     env:
-      api-level: 30
-      api-target: google_atd
-      api-arch: x86
+      api-level: 31
+      api-target: default
+      api-arch: x86_64
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
