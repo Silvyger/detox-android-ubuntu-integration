@@ -6,8 +6,8 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     env:
-      api-level: 29
-      api-target: default
+      api-level: 30
+      api-target: aosp-atd
       api-arch: x86
     strategy:
       matrix:
