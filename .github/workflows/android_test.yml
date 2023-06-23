@@ -37,7 +37,7 @@ jobs:
     - name: Start Android Emulator
       timeout-minutes: 10
       run: |
-        $ANDROID_SDK_ROOT/tools/emulator -avd test_device -wipe-data -no-snapshot -memory 2048 -no-window -gpu swiftshader_indirect -no-accel -noaudio -no-boot-anim -camera-back none &
+        $ANDROID_SDK_ROOT/emulator/emulator -avd test_device -wipe-data -no-snapshot -memory 2048 -no-window -gpu swiftshader_indirect -no-accel -noaudio -no-boot-anim -camera-back none &
         adb wait-for-device shell 'echo "Device started."; while [[ -z $(getprop sys.boot_completed) ]]; do echo "Waiting for boot."; sleep 5; done;'
     - name: Run Detox Tests
       timeout-minutes: 5
